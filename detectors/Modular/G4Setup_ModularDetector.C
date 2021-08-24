@@ -10,16 +10,17 @@
 #include <G4_TTL_EIC.C>
 #include <G4_GEM_EIC.C>
 #include <G4_Bbc.C>
-#include <G4_CEmc_EIC.C>
+//#include <G4_CEmc_EIC.C>
+#include <G4_CEmc_Spacal.C>
 #include <G4_DIRC.C>
 #include <G4_DRCALO.C>
 #include <G4_EEMC.C>
 #include <G4_EEMC_hybrid.C>
 #include <G4_FEMC_EIC.C>
-#include <G4_FHCAL.C>
+//#include <G4_FHCAL.C>
 #include <G4_LFHCAL.C>
 #include <G4_EHCAL.C>
-#include <G4_HCalIn_EIC.C>
+//#include <G4_HCalIn_EIC.C>
 #include <G4_HcalOut_ref.C>
 #include <G4_Mvtx_EIC.C>
 // #include <G4_RICH.C>
@@ -32,7 +33,7 @@
 
 #include <G4_BlackHole.C>
 #include <G4_Magnet.C>
-#include <G4_hFarFwdBeamLine_EIC.C>
+//#include <G4_hFarFwdBeamLine_EIC.C>
 #include <G4_Pipe_EIC_simple.C>
 #include <G4_PlugDoor_EIC.C>
 #include <G4_User.C>
@@ -93,7 +94,7 @@ void G4Init()
   if (Enable::MAGNET) MagnetInit();
   MagnetFieldInit(); // We want the field - even if the magnet volume is disabled
   if (Enable::PIPE) PipeInit();
-  if (Enable::HFARFWD_MAGNETS) hFarFwdBeamLineInit();
+//  if (Enable::HFARFWD_MAGNETS) hFarFwdBeamLineInit();
   // trackers
   if (Enable::EGEM) EGEM_Init();
   if (Enable::FGEM) FGEM_Init();
@@ -111,11 +112,11 @@ void G4Init()
   
   // calorimeters
   if (Enable::CEMC) CEmcInit(72);  // make it 2*2*2*3*3 so we can try other combinations
-  if (Enable::HCALIN) HCalInnerInit(1);
+//  if (Enable::HCALIN) HCalInnerInit(1);
   if (Enable::HCALOUT) HCalOuterInit();
   if (Enable::FEMC) FEMCInit();
   if (Enable::DRCALO) DRCALOInit();
-  if (Enable::FHCAL) FHCALInit();
+// if (Enable::FHCAL) FHCALInit();
   if (Enable::LFHCAL) LFHCALInit();
   if (Enable::EHCAL) EHCALInit();
   if (Enable::EEMC) EEMCInit();
@@ -173,9 +174,9 @@ int G4Setup(TString specialSetting = ""){
 // clear how well this works nowadays but it doesn't hurt either
   double radius = 0.;
   if (Enable::PIPE) radius = Pipe(g4Reco, radius);
-  if (Enable::HFARFWD_MAGNETS_IP6 || Enable::HFARFWD_MAGNETS_IP8) hFarFwdDefineMagnets(g4Reco);
-  if (Enable::HFARFWD_VIRTUAL_DETECTORS_IP6) hFarFwdDefineDetectorsIP6(g4Reco);
-  if (Enable::HFARFWD_VIRTUAL_DETECTORS_IP8) hFarFwdDefineDetectorsIP8(g4Reco);
+  //if (Enable::HFARFWD_MAGNETS_IP6 || Enable::HFARFWD_MAGNETS_IP8) hFarFwdDefineMagnets(g4Reco);
+  //if (Enable::HFARFWD_VIRTUAL_DETECTORS_IP6) hFarFwdDefineDetectorsIP6(g4Reco);
+  //  if (Enable::HFARFWD_VIRTUAL_DETECTORS_IP8) hFarFwdDefineDetectorsIP8(g4Reco);
 
   //----------------------------------------
   // trackers
@@ -195,13 +196,13 @@ int G4Setup(TString specialSetting = ""){
   if (Enable::BBC) Bbc(g4Reco);
   //----------------------------------------
   // calos
-  if (Enable::CEMC) radius = CEmc(g4Reco, radius);
+  if (Enable::CEMC) radius = CEmc(g4Reco, radius,4);
   if (Enable::BECAL) BECALSetup(g4Reco);
-  if (Enable::HCALIN) radius = HCalInner(g4Reco, radius, 4);
+  //  if (Enable::HCALIN) radius = HCalInner(g4Reco, radius, 4);
   if (Enable::MAGNET) radius = Magnet(g4Reco, radius);
   if (Enable::HCALOUT) radius = HCalOuter(g4Reco, radius, 4);
   if (Enable::FEMC) FEMCSetup(g4Reco);
-  if (Enable::FHCAL) FHCALSetup(g4Reco);
+  // if (Enable::FHCAL) FHCALSetup(g4Reco);
   if (Enable::DRCALO) DRCALOSetup(g4Reco);
   if (Enable::LFHCAL) LFHCALSetup(g4Reco);
   if (Enable::EHCAL) EHCALSetup(g4Reco);
@@ -282,13 +283,14 @@ void ShowerCompress(){
   compress->AddTowerContainer("TOWER_RAW_DRCALO");
   compress->AddTowerContainer("TOWER_CALIB_DRCALO");
 
-  compress->AddHitContainer("G4HIT_FHCAL");
+  //  compress->AddHitContainer("G4HIT_FHCAL");
+  /*
   compress->AddHitContainer("G4HIT_ABSORBER_FHCAL");
   compress->AddCellContainer("G4CELL_FHCAL");
   compress->AddTowerContainer("TOWER_SIM_FHCAL");
   compress->AddTowerContainer("TOWER_RAW_FHCAL");
   compress->AddTowerContainer("TOWER_CALIB_FHCAL");
-  
+  */
   compress->AddHitContainer("G4HIT_LFHCAL");
   compress->AddHitContainer("G4HIT_ABSORBER_LFHCAL");
   compress->AddCellContainer("G4CELL_LFHCAL");
